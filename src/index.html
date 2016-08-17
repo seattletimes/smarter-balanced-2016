@@ -1,6 +1,6 @@
 <%
 
-  var scoreFields = "MathPercentMetStandardIncludingPrevPass ELAPercentMetStandardIncludingPrevPass".split(" ");
+    var scoreFields = "MathPercentMetStandardIncludingPrevPass ELAPercentMetStandardIncludingPrevPass".split(" ");
 
   var whitelist = ["School", "District", "County", "GradeLevel"];
 
@@ -45,8 +45,8 @@
     if (!hasResult) return;
     if (!group.grades) return;
     if (!group.grades[row.GradeTested]) return;
-    group.grades[row.GradeTested].elaDiff = Math.round(group.grades[row.GradeTested].ela - row.ELAPercentMetStandardIncludingPrevPass);
-    group.grades[row.GradeTested].mathDiff = Math.round(group.grades[row.GradeTested].math - row.MathPercentMetStandardIncludingPrevPass);
+    group.grades[row.GradeTested].elaDiff = (group.grades[row.GradeTested].ela - row.ELAPercentMetStandardIncludingPrevPass);
+    group.grades[row.GradeTested].mathDiff = (group.grades[row.GradeTested].math - row.MathPercentMetStandardIncludingPrevPass);
   });
 
   var groupedSchoolResults = {};
@@ -77,8 +77,26 @@
     if (!hasResult) return;
     if (!group.grades) return;
     if (!group.grades[row.GradeTested]) return;
-    group.grades[row.GradeTested].elaDiff = Math.round(group.grades[row.GradeTested].ela - row.ELAPercentMetStandardIncludingPrevPass);
-    group.grades[row.GradeTested].mathDiff = Math.round(group.grades[row.GradeTested].math - row.MathPercentMetStandardIncludingPrevPass);
+    var grade = group.grades[row.GradeTested];
+    grade.elaDiff = (grade.ela - row.ELAPercentMetStandardIncludingPrevPass);
+    if (grade.elaDiff > 0) {
+      grade.elaDirection = "up";
+    } else if (grade.elaDiff < 0) {
+      grade.elaDirection = "down";
+      grade.elaDiff *= -1;
+    } else {
+      grade.elaDirection = "same";
+    }
+
+    grade.mathDiff = (grade.math - row.MathPercentMetStandardIncludingPrevPass);
+    if (grade.mathDiff > 0) {
+      grade.mathDirection = "up";
+    } else if (grade.mathDiff < 0) {
+      grade.mathDirection = "down";
+      grade.mathDiff *= -1;
+    } else {
+      grade.mathDirection = "same";
+    }
   });
 
   var groupedSchools = Object.keys(groupedSchoolResults).map(function(k) { 
@@ -93,10 +111,7 @@
   });
 
 
-  var grouped = Object.keys(groupedResults).map(function(k) { 
-    return groupedResults[k] 
-  });
-
+  var grouped = Object.keys(groupedResults).map(function(k) { return groupedResults[k] });
 %>
 
 <!doctype html>

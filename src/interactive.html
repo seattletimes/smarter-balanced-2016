@@ -45,8 +45,11 @@
     if (!hasResult) return;
     if (!group.grades) return;
     if (!group.grades[row.GradeTested]) return;
-    group.grades[row.GradeTested].elaDiff = Math.round(group.grades[row.GradeTested].ela - row.ELAPercentMetStandardIncludingPrevPass);
-    group.grades[row.GradeTested].mathDiff = Math.round(group.grades[row.GradeTested].math - row.MathPercentMetStandardIncludingPrevPass);
+    var grade = group.grades[row.GradeTested];
+    grade.elaDiff = (grade.ela - row.ELAPercentMetStandardIncludingPrevPass);
+
+    grade.mathDiff = (grade.math - row.MathPercentMetStandardIncludingPrevPass);
+
   });
 
   var groupedSchoolResults = {};
@@ -77,8 +80,12 @@
     if (!hasResult) return;
     if (!group.grades) return;
     if (!group.grades[row.GradeTested]) return;
-    group.grades[row.GradeTested].elaDiff = Math.round(group.grades[row.GradeTested].ela - row.ELAPercentMetStandardIncludingPrevPass);
-    group.grades[row.GradeTested].mathDiff = Math.round(group.grades[row.GradeTested].math - row.MathPercentMetStandardIncludingPrevPass);
+    var grade = group.grades[row.GradeTested];
+    grade.elaDiff = (grade.ela - row.ELAPercentMetStandardIncludingPrevPass);
+
+
+    grade.mathDiff = (grade.math - row.MathPercentMetStandardIncludingPrevPass);
+
   });
 
   var groupedSchools = Object.keys(groupedSchoolResults).map(function(k) { 
@@ -135,9 +142,9 @@
               <tr class="header">
                 <td class="grade">Grade</td>
                 <td class="math score"><div><i class="fa fa-calculator"></i></div>Math</td>
-                <td class="math average"><div></div>State Avg.</td>
+                <td class="math average"><div></div>Diff. from 2015</td>
                 <td class="reading score"><div><i class="fa fa-pencil"></i></div>ELA</td>
-                <td class="reading average"><div></div>State Avg.</td>
+                <td class="reading average"><div></div>Diff. from 2015</td>
               </tr>
 
               <tr ng-repeat="row in school.grades">
@@ -155,7 +162,12 @@
                 </td>
 
                 <td class="math average">
-                  ({{mathAverages[row.GradeLevel] | number : 1}}%)
+                  <span ng-if="row.mathDiff">
+                    {{row.mathDiff | number : 1}}%
+                  </span>
+                  <span ng-if="!row.mathDiff">
+                    -
+                  </span>
                 </td>
 
                 <td class="reading">
@@ -169,7 +181,12 @@
                 </td>
 
                 <td class="reading average">
-                  ({{elaAverages[row.GradeLevel] | number : 1}}%)
+                  <span ng-if="row.elaDiff">
+                      {{row.elaDiff | number : 1}}%
+                  </span>
+                  <span ng-if="!row.elaDiff">
+                    -
+                  </span>
                 </td>
 
               </tr>

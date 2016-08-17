@@ -11,8 +11,7 @@ app.controller("commonCoreController", ["$scope", function($scope) {
   $scope.districtData = districtData;
   var all = districtData;
 
-  console.log(districtData)
-
+console.log(districtData)
   $scope.districts = window.districtData;
   $scope.selected = all;
   $scope.schoolName = "";
@@ -35,6 +34,13 @@ app.controller("commonCoreController", ["$scope", function($scope) {
     "8": 59.7,
     "11": 75.5
   };
+
+  // Set Seattle Public Schools as default view
+  $scope.district = $scope.districts.filter(function(d) {
+    if (d.district == "Seattle Public Schools") {
+      return d;
+    }
+  })[0];
 
   //update selected from the district dropdown
   $scope.$watch("district", function() {
