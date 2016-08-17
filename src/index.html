@@ -2,7 +2,7 @@
 
   var scoreFields = "MathPercentMetStandardIncludingPrevPass ELAPercentMetStandardIncludingPrevPass".split(" ");
 
-  var whitelist = scoreFields.concat(["School", "District", "County", "GradeLevel"]);
+  var whitelist = ["School", "District", "County", "GradeLevel"];
 
   var clean = function(r) {
     var out = {};
@@ -16,6 +16,8 @@
 
   var districtData = csv.scores_by_district_new;
   var schoolData = csv.scores_by_school_new;
+  var districtDataOld = csv.scores_by_district;
+  var schoolDataOld = csv.scores_by_school;
 
   districtData.forEach(function(row) {
     if (row.testAdministration !== "SBA") return;
@@ -33,6 +35,18 @@
     } else if (row.Subject == "MATH") {
       group.grades[row.GradeLevel].math = row.PercentMetStandardIncludingPP;
     }
+  });
+
+  districtDataOld.forEach(function(row) {
+    if (!groupedResults[row.District]) return;
+    var group = groupedResults[row.District];
+    var hasResult = false;
+    scoreFields.forEach(function(f) { hasResult = hasResult || !!row[f] });
+    if (!hasResult) return;
+    if (!group.grades) return;
+    if (!group.grades[row.GradeTested]) return;
+    group.grades[row.GradeTested].elaDiff = Math.round(group.grades[row.GradeTested].ela - row.ELAPercentMetStandardIncludingPrevPass);
+    group.grades[row.GradeTested].mathDiff = Math.round(group.grades[row.GradeTested].math - row.MathPercentMetStandardIncludingPrevPass);
   });
 
   var groupedSchoolResults = {};
@@ -55,6 +69,18 @@
     }
   });
 
+  schoolDataOld.forEach(function(row) {
+    if (!groupedSchoolResults[row.School + row.District]) return;
+    var group = groupedSchoolResults[row.School + row.District];
+    var hasResult = false;
+    scoreFields.forEach(function(f) { hasResult = hasResult || !!row[f] });
+    if (!hasResult) return;
+    if (!group.grades) return;
+    if (!group.grades[row.GradeTested]) return;
+    group.grades[row.GradeTested].elaDiff = Math.round(group.grades[row.GradeTested].ela - row.ELAPercentMetStandardIncludingPrevPass);
+    group.grades[row.GradeTested].mathDiff = Math.round(group.grades[row.GradeTested].math - row.MathPercentMetStandardIncludingPrevPass);
+  });
+
   var groupedSchools = Object.keys(groupedSchoolResults).map(function(k) { 
     return groupedSchoolResults[k]
   });
@@ -66,7 +92,10 @@
     district.schools[school.school] = school;
   });
 
-  var grouped = Object.keys(groupedResults).map(function(k) { return groupedResults[k] });
+
+  var grouped = Object.keys(groupedResults).map(function(k) { 
+    return groupedResults[k] 
+  });
 
 %>
 
