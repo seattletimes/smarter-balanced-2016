@@ -166,6 +166,10 @@ table {
   margin-top: 10px;
   width: 150px;
 
+  @media @mobile {
+    font-size: 13px;
+  }
+
   .table-label {
     font-size: 13px;
     text-align: left;
@@ -179,10 +183,18 @@ table {
   .fa {
     font-size: 24px !important;
     margin-bottom: 7px;
+
+    @media @mobile {
+      font-size: 18px !important;
+    }
   }
 
   td {
     padding: 5px 20px;
+
+    @media @mobile {
+      padding: 5px 10px;
+    }
   }
 
 // .grade {
@@ -205,7 +217,7 @@ table {
         font-size: 13px;
 
         @media @mobile {
-          display: none;
+          font-size: 13px;
         }
       }
     }
@@ -222,7 +234,7 @@ table {
         border: none;
 
         @media @mobile {
-          display: none;
+          // display: none;
         }
       }
     }
@@ -246,7 +258,7 @@ table {
         font-size: 13px;
 
         @media @mobile {
-          display: none;
+          // display: none;
         }
       }
     }
@@ -263,7 +275,7 @@ table {
         border: none;
 
         @media @mobile {
-          display: none;
+          // display: none;
         }
       }
     }
@@ -275,6 +287,10 @@ table {
     vertical-align: bottom;
     text-transform: uppercase;
     color: white;
+
+    @media @mobile {
+      font-size: 12px;
+    }
 
     td {
       padding-top: 10px;
@@ -300,7 +316,7 @@ table {
         font-size: 12px !important;
 
         @media @mobile {
-          display: none;
+          // display: none;
         }
       }
     }
@@ -319,7 +335,7 @@ table {
         font-size: 12px !important;
 
         @media @mobile {
-          display: none;
+          // display: none;
         }
       }
     }

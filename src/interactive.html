@@ -47,9 +47,23 @@
     if (!group.grades[row.GradeTested]) return;
     var grade = group.grades[row.GradeTested];
     grade.elaDiff = (grade.ela - row.ELAPercentMetStandardIncludingPrevPass);
-
+    if (grade.elaDiff > 0) {
+      grade.elaDirection = "+";
+    } else if (grade.elaDiff < 0) {
+      grade.elaDirection = "-";
+      grade.elaDiff *= -1;
+    } else {
+      grade.elaDirection = "";
+    }
     grade.mathDiff = (grade.math - row.MathPercentMetStandardIncludingPrevPass);
-
+    if (grade.mathDiff > 0) {
+      grade.mathDirection = "+";
+    } else if (grade.mathDiff < 0) {
+      grade.mathDirection = "-";
+      grade.mathDiff *= -1;
+    } else {
+      grade.mathDirection = "";
+    }
   });
 
   var groupedSchoolResults = {};
@@ -82,10 +96,24 @@
     if (!group.grades[row.GradeTested]) return;
     var grade = group.grades[row.GradeTested];
     grade.elaDiff = (grade.ela - row.ELAPercentMetStandardIncludingPrevPass);
-
+    if (grade.elaDiff > 0) {
+      grade.elaDirection = "+";
+    } else if (grade.elaDiff < 0) {
+      grade.elaDirection = "-";
+      grade.elaDiff *= -1;
+    } else {
+      grade.elaDirection = "";
+    }
 
     grade.mathDiff = (grade.math - row.MathPercentMetStandardIncludingPrevPass);
-
+    if (grade.mathDiff > 0) {
+      grade.mathDirection = "+";
+    } else if (grade.mathDiff < 0) {
+      grade.mathDirection = "-";
+      grade.mathDiff *= -1;
+    } else {
+      grade.mathDirection = "";
+    }
   });
 
   var groupedSchools = Object.keys(groupedSchoolResults).map(function(k) { 
@@ -137,14 +165,14 @@
 
             <table ng-if="school.grades">
 
-              <tr ng-if="school.grades" class="table-label"><td colspan="3">Percentage of students proficient:</td></tr>
+              <tr ng-if="school.grades" class="table-label"><td colspan="5">Percentage of students proficient:</td></tr>
 
               <tr class="header">
                 <td class="grade">Grade</td>
                 <td class="math score"><div><i class="fa fa-calculator"></i></div>Math</td>
-                <td class="math average"><div></div>Diff. from 2015</td>
+                <td class="math average"><div></div>Change from 2015</td>
                 <td class="reading score"><div><i class="fa fa-pencil"></i></div>ELA</td>
-                <td class="reading average"><div></div>Diff. from 2015</td>
+                <td class="reading average"><div></div>Change from 2015</td>
               </tr>
 
               <tr ng-repeat="row in school.grades">
@@ -163,7 +191,7 @@
 
                 <td class="math average">
                   <span ng-if="row.mathDiff">
-                    {{row.mathDiff | number : 1}}%
+                    {{row.mathDirection}}{{row.mathDiff | number : 1}}
                   </span>
                   <span ng-if="!row.mathDiff">
                     -
@@ -182,7 +210,7 @@
 
                 <td class="reading average">
                   <span ng-if="row.elaDiff">
-                      {{row.elaDiff | number : 1}}%
+                    {{row.elaDirection}}{{row.elaDiff | number : 1}}
                   </span>
                   <span ng-if="!row.elaDiff">
                     -
@@ -198,7 +226,7 @@
 
         <div class="bottom">
           <div class="note">
-            Note: Students who opted out of the test were given scores of zero, and are counted in these numbers as not passing. In a number of high schools across the state, many 11th-graders opted out of the math exam, which is the reason passing rates may be low. Results also aren’t available when only a small number of students took the test.
+            Note: Students who opted out of the test were given scores of zero, and are counted in these numbers as not passing. For student privacy reasons, results aren’t available when only a small number of students took the test or when fewer than 10 passed or failed.
           </div>
           <div class="source"><em>
             Source: Office of Superintendent of Public Instruction</em>
